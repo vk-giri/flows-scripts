@@ -1,19 +1,17 @@
 {
-  "name": "custom-hook",
+  "name": "management-node",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "express-basic-auth": "^1.2.1",
-    "nodemon": "^3.1.9"
+    "@okta/okta-sdk-nodejs": "^7.1.1",
+    "dotenv": "^16.4.7"
   }
 }
