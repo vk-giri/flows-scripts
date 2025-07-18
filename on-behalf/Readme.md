@@ -24,5 +24,5 @@ node server.js
 ### 2. Using a Different Auth Server for Token Exchange
 
 ```bash
-node server.js -your-trusted-server-issuer-url
+node server.js -yourTrustedServerIssuerUrl
 ```
