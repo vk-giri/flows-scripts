@@ -60,6 +60,4 @@ async function oboTokenExchange() {
   }
 }
 
-// run node server.js if you want to use same auth server
-// run node server.js -trusted-server-issuer-url if you want to use trusted server
 oboTokenExchange();
