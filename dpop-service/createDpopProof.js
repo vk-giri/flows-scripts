@@ -25,7 +25,7 @@ function updateDpop(nonce) {
 
   // add nonce value to the dpop proof payload
   // jit: a random value, which should be unique for every request
-  const newClaims = { ...claims, nonce, jit: randomString };
+  const newClaims = { ...claims, nonce, jti: randomString };
 
   const jwt = njwt.create(newClaims, privateKey, alg).setHeader('typ', 'dpop+jwt').setHeader('jwk', publicKey).compact();
 
