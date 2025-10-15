@@ -3,7 +3,7 @@ const { default: axios } = require('axios');
 const { getToken } = require('./getTokens');
 const { issuer, cc_scopes, cc_aud, cc_client_id, cc_client_secret, trustedServer } = require('./config');
 
-const base64Encode = () => {
+const base64Encode = (client_id, client_secret) => {
   // The original utf8 string
   const originalString = `${cc_client_id}:${cc_client_secret}`;
 
@@ -26,7 +26,7 @@ const tokenConfig = {
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/x-www-form-urlencoded',
-    Authorization: 'Basic ' + base64Encode(),
+    Authorization: 'Basic ' + base64Encode(cc_client_id, cc_client_secret),
   },
   data: {
     grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
