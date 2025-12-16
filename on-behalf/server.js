@@ -4,13 +4,10 @@ const { getToken } = require('./getTokens');
 const { issuer, cc_scopes, cc_aud, cc_client_id, cc_client_secret, trustedServer } = require('./config');
 
 const base64Encode = (client_id, client_secret) => {
-  // The original utf8 string
   const originalString = `${client_id}:${client_secret}`;
 
-  // Create buffer object, specifying utf8 as encoding
   const bufferObj = Buffer.from(originalString, 'utf8');
 
-  // Encode the Buffer as a base64 string
   const base64String = bufferObj.toString('base64');
 
   return base64String;
