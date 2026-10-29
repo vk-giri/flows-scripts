@@ -1,0 +1,19 @@
+{
+  "name": "oauth-service-external-keys",
+  "version": "1.0.0",
+  "description": "interact with Okta APIs by using scoped OAuth 2.0 access tokens for a service app whose keys are hosted at an external JWKS URL.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.8",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jwt-decode": "^4.0.0",
+    "njwt": "^2.0.1"
+  }
+}

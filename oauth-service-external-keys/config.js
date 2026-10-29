@@ -1,0 +1,13 @@
+const dotenv = require('dotenv');
+
+dotenv.config({ path: __dirname + '/testenv' });
+
+module.exports = {
+  base_url: process.env.URL,
+  port: process.env.PORT,
+  client_id: process.env.CLIENT_ID,
+  kid: process.env.KID,
+  scopes: process.env.SCOPES,
+  jwks_url: process.env.JWKS_URL,
+  private_key_path: process.env.PRIVATE_KEY_PATH || __dirname + '/private.key',
+};
