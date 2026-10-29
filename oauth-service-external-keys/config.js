@@ -9,5 +9,4 @@ module.exports = {
   kid: process.env.KID,
   scopes: process.env.SCOPES,
   jwks_url: process.env.JWKS_URL,
-  private_key_path: process.env.PRIVATE_KEY_PATH || __dirname + '/private.key',
 };

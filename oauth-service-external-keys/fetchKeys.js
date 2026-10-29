@@ -2,7 +2,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const fs = require('fs');
 
-const { jwks_url, kid, private_key_path } = require('./config');
+const { jwks_url, kid } = require('./config');
 
 // Dedicated axios instance so every outbound request to the keys endpoint gets logged
 const jwksClient = axios.create();
@@ -87,39 +87,20 @@ async function fetchJwks() {
   }
 }
 
-// Pick the key matching KID, or the first signing key if KID is not set
-function selectKey(keys) {
-  const key = kid ? keys.find((k) => k.kid === kid) : keys.find((k) => !k.use || k.use === 'sig');
-
-  if (!key) throw new Error('No matching key found in JWKS' + (kid ? ' for kid ' + kid : ''));
-  if (!key.kid) throw new Error('Selected key has no kid, Okta needs the kid to find the key');
-
-  return key;
-}
-
-// Returns { kid, alg, privateKey } used for signing the client assertion.
-// If the external JWKS contains the private part ("d") it is used directly,
-// otherwise the local private key is used and checked against the fetched public key.
+// The JWKS URL only has public keys, the private key stays local in private.key.
+// Find the published key that matches the local private key and use its kid.
 async function getSigningKey() {
-  const jwk = selectKey(await fetchJwks());
-  const alg = jwk.alg || (jwk.kty === 'EC' ? 'ES256' : 'RS256');
+  const privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+  const localPublic = crypto.createPublicKey(privateKey).export({ format: 'jwk' });
 
-  let privateKey;
+  const keys = await fetchJwks();
+  const jwk = keys.find((k) => k.n === localPublic.n && (!kid || k.kid === kid));
 
-  if (jwk.d) {
-    console.log('Using private key from JWKS for kid ' + jwk.kid);
-    privateKey = crypto.createPrivateKey({ key: jwk, format: 'jwk' });
-  } else {
-    console.log('Using local private key ' + private_key_path + ' for kid ' + jwk.kid);
-    privateKey = crypto.createPrivateKey(fs.readFileSync(private_key_path, 'utf8'));
+  if (!jwk) throw new Error('private.key does not match any public key' + (kid ? ' with kid ' + kid : '') + ' at ' + jwks_url);
 
-    const localPublic = crypto.createPublicKey(privateKey).export({ format: 'jwk' });
-    if (localPublic.n !== jwk.n || localPublic.x !== jwk.x) {
-      throw new Error('Local private key does not match the public key ' + jwk.kid + ' published at ' + jwks_url);
-    }
-  }
+  console.log('Signing with private.key, matches public key kid ' + jwk.kid);
 
-  return { kid: jwk.kid, alg, privateKey: privateKey.export({ type: 'pkcs8', format: 'pem' }) };
+  return { kid: jwk.kid, alg: jwk.alg || 'RS256', privateKey };
 }
 
-module.exports = { fetchJwks, getSigningKey, parseMaxAge };
+module.exports = { fetchJwks, getSigningKey };

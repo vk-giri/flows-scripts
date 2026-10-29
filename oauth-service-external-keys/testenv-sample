@@ -3,7 +3,5 @@ PORT=3000
 CLIENT_ID=your_service_app_client_id
 SCOPES=okta.users.read okta.apps.read
 JWKS_URL=https://your-host.example.com/.well-known/jwks.json
-# Optional: kid of the key to use from the JWKS. Defaults to the first signing key
+# Optional: kid of the public key in the JWKS. Defaults to the key that matches private.key
 KID=
-# Optional: used when the JWKS only has public keys. Defaults to ./private.key
-PRIVATE_KEY_PATH=
